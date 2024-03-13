@@ -1,19 +1,10 @@
-import { Client } from "@planetscale/database";
-import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { drizzle } from 'drizzle-orm/vercel-postgres';
+import { sql } from "@vercel/postgres";
 
-import * as auth from "./schema/auth";
 import * as post from "./schema/post";
 
-export const schema = { ...auth, ...post };
+export const schema = { ...post };
 
-export { mySqlTable as tableCreator } from "./schema/_table";
+export const db = drizzle(sql, {schema});
 
 export * from "drizzle-orm";
-
-const psClient = new Client({
-  host: process.env.DB_HOST!,
-  username: process.env.DB_USERNAME!,
-  password: process.env.DB_PASSWORD!,
-});
-
-export const db = drizzle(psClient, { schema });
